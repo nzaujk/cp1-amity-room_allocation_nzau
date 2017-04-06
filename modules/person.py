@@ -2,16 +2,9 @@ import os
 
 
 class Person(object):
-    def __init__(self, **kwargs):
-        pass
-
-# Adds a person to the system and allocates the person to a random room.
-    def add_person(self, emp_id, name):
-        self.file_name = open(os.path.dirname(__file__), 'amity_load.txt', mode='w').read()
-        self.file_name.close()
+    def __init__(self):
         self.emp_id = []
         self.name = []
-        self.add_person({self.emp_id: self.name})
 
     def allocate_person(self):
         pass
@@ -30,24 +23,58 @@ class Person(object):
 
 
 class Fellow(Person):
-    def __init__(self):
-        pass
+    # Adds a person to the system and allocates the person to a random room.
+    def add_fellow(self, emp_id, name):
+        self.emp_id = []
+        self.name =[]
+        directory = {self.emp_id: self.name}
 
-    def add_fellow(self):
-        pass
+        for fellow in directory:
+            if emp_id and name not in directory:
+                self.emp_id.append
+                self.name.append
+                directory.add()
+                self.file_name = open('amity_load.txt', mode='w')
+                self.file_name.close()
+                return fellow
+            else:
+                return "fellow already exists"
 
-    def is_fellow(self):
-        # functions to determine if is fellow
-        pass
+    def is_fellow(self, emp_id, name):
+        #determine if is fellow
+        self.emp_id = [emp_id]
+        self.name =[name]
+        directory = [{emp_id: name}]
+        for emp_id, name in directory:
+            if emp_id and name is True:
+                return 'is fellow'
+            else:
+                return "not fellow"
 
 
 class Staff(Person):
-    def __init__(self):
-        pass
+    def add_staff(self, emp_id, name):
+        self.emp_id = []
+        self.name = []
+        directory = set({self.emp_id: self.name})
+        for staff in directory:
+            if emp_id and name not in directory:
+                self.emp_id.append
+                self.name.append
+                directory.add()
+                self.file_name = open(os.path.dirname(__file__), 'amity_load.txt', mode='w')
+                self.file_name.close()
+                return staff
+            else:
+                return "staff already exists"
 
-    def add_staff(self):
-        pass
-
-    def is_staff(self):
-        # functions to determine if is fellow
-        pass
+    def is_staff(self, emp_id, name):
+        # functions to determine if is staff
+        self.emp_id = [emp_id]
+        self.name = [name]
+        directory = [{emp_id: name}]
+        for emp_id, name in directory:
+            if emp_id and name is True:
+                return 'is staff'
+            else:
+                return "not staff"
