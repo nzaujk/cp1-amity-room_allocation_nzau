@@ -85,7 +85,7 @@ class TestClassInheritance(unittest.TestCase):
 
     def test_allocate_office(self):
         '''allocate office to person'''
-        self.assertEqual(self.test_amity.allocate_person, {"emp_id": 'name', Staff: True, Fellow:True} )
+        self.assertEqual(self.test_amity.allocate_person, {"emp_id": 'name', Staff: True, Fellow: True})
 
     def test_allocate_living_space(self):
         '''allocate living space to person'''

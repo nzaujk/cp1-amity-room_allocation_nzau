@@ -54,9 +54,9 @@ class Fellow(Person):
 
 class Staff(Person):
     def add_staff(self, emp_id, name):
-        self.emp_id = []
-        self.name = []
-        directory = set({self.emp_id: self.name})
+        self.emp_id = emp_id
+        self.name = name
+        directory = set({emp_id: name})
         for staff in directory:
             if emp_id and name not in directory:
                 self.emp_id.append
