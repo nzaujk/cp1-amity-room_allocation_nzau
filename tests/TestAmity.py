@@ -1,4 +1,4 @@
-""" Unit tests for the methonds in the
+""" Unit tests for the methods in the
 Amity Class"""
 import os
 import unittest
