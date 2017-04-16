@@ -2,7 +2,6 @@
 to create rooms,add people and allocate/reallocate rooms"""
 import os
 import random
-
 from modules.room import LivingSpace,Office
 from modules.person import Fellow, Staff
 
