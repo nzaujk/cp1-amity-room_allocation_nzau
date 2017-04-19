@@ -21,8 +21,8 @@ class Amity (object):
         self.staff = []
         self.fellow = []
         self.employees = {}
-        self.living_space = {"None": []}
-        self.office = {"None":[]}
+        self.living_space = defaultdict(list)
+        self.office = defaultdict(list)
 
     def create_room(self, room_type, room_name):
         """Check room does not exist."""
@@ -50,7 +50,7 @@ class Amity (object):
         if full_name.title() in self.employees:
             print('{} is already in the system.'.format(full_name))
 
-    def add_person(self,first_name, last_name, role, wants_accommodation='N'):
+    def add_person(self, first_name, last_name, role, wants_accommodation='N'):
         if role.upper() == 'FELLOW' and wants_accommodation.upper() == 'Y':
             new_fellow = Fellow(first_name, last_name)
             self.employees[new_fellow.name.title()] = role
@@ -313,7 +313,7 @@ class Amity (object):
         if db_name:
             db_load = AmityDatabaseLoad(db_name)
         else:
-            db_load = AmityDatabaseLoad('room_allocation_db')
+            print("cannot find database")
 
         Base.metadata.bind = db_load.engine
         db_session = db_load.session
@@ -370,7 +370,7 @@ class Amity (object):
         print(" {0} loaded successfully." .format(db_name))
 
     def save_state(self,db_name=None):
-        if not db_name:
+        if db_name:
             db_load = AmityDatabaseLoad("room_allocation_db")
         else:
             db_load = AmityDatabaseLoad(db_name)
