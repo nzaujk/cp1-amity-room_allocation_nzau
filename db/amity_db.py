@@ -7,7 +7,7 @@ Base = declarative_base()
 
 
 class AmityDatabaseLoad(object):
-    def __init__(self, db_name='amity_room_allocation_db'):
+    def __init__(self, db_name='room_allocation_db'):
         self.db_name = db_name
         if self.db_name:
             self.db_name = db_name + '.sqlite'

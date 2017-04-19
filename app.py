@@ -9,6 +9,7 @@ Usage:
     print_room <room_name>
     save_state [--db=sqlite_database]
     load_state [--db=sqlite_database]
+    load_rooms <filename>
     quit
 Options:
     -h, --help  Show this screen and exit
@@ -65,14 +66,14 @@ def introduction():
     print(border)
     print('WELCOME TO AMITY ALLOCATION '.center(140))
     print("1. create_room (Office|Living Space) <room_name>".center(35) + " \t \t \t \t"+
-          "5. print_allocations [--o=filename.txt]".center(60))
+          "6. print_allocations [--o=filename.txt]".center(60))
     print("2. add_person < first_name> <last_name> (Fellow|Staff) [<wants_space>]".center(35)
-     + ""+ "6. print_unallocated [--o=filename.txt]".center(47))
+     + ""+ "7. print_unallocated [--o=filename.txt]".center(47))
     print("3. reallocate_person <employee_id> <new_room_name>".center(35) + " \t \t \t"+
-          "7. print_room <room_name>".center(53))
+          "8. print_room <room_name>".center(53))
     print("4. load_people <filename>".center(25) + " \t\t \t \t \t \t"+
-          "8. save_state [--db=sqlite_database]".center(88))
-    print("9.load_state <sqlite_database>".center(178))
+          "9. save_state [--db=sqlite_database]".center(88))
+    print("5. load_rooms <filename>".center(23) + " \t\t \t " + "10.load_state <sqlite_database>".center(105))
     print(border)
     print("\n")
     print("OPTIONAL COMMANDS:".center(140))
@@ -180,6 +181,15 @@ class AmityApplication(cmd.Cmd):
         '''Usage: load_state [--db=sqlite_database]'''
         db_name = arg["--db"]
         amity_object.load_state(db_name)
+
+    @docopt_cmd
+    def do_load_rooms(self, arg):
+        """Usage: load_rooms <filename>"""
+        filename = arg["<filename>"]
+        if os.path.exists(filename):
+            amity_object.load_rooms(filename)
+        else:
+            print("File not found")
 
     @docopt_cmd
     def do_quit(self, arg):
