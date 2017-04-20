@@ -1,0 +1,70 @@
+##############################
+Office
+##############################OldTown
+******************************Dominic WaltersLeigh Riley OldValyria
+******************************Oluwafemi SuleBraavos
+******************************Mari LawrenceWesteros
+******************************Kelly McguireRiverLands
+******************************Simon PattersonTana LopezDorne
+************************************************************
+Living Space
+******************************King'sLanding
+******************************BeyondTheWall
+******************************Mari LawrenceTana LopezTheNorth
+******************************Oluwafemi SuleVolantis
+******************************CasterlyRock
+******************************WinterFell
+******************************Simon Patterson##############################
+Office
+##############################OldTown
+******************************Mari LawrenceKelly McguireOldValyria
+******************************Braavos
+******************************Oluwafemi SuleDominic WaltersLeigh RileyWesteros
+******************************RiverLands
+******************************Simon PattersonTana LopezDorne
+************************************************************
+Living Space
+******************************King'sLanding
+******************************Oluwafemi SuleMari LawrenceBeyondTheWall
+******************************TheNorth
+******************************Volantis
+******************************Tana LopezCasterlyRock
+******************************Simon PattersonWinterFell
+******************************##############################
+Office
+##############################OldTown: 	
+******************************
+OldTown: /tDOMINIC WALTERS
+
+OldTown: /tKELLY MCGUIRE
+OldValyria: 	
+******************************
+OldValyria: /tMARI LAWRENCE
+Braavos: 	
+******************************
+Braavos: /tLEIGH RILEY
+
+Braavos: /tTANA LOPEZ
+Westeros: 	
+******************************
+Westeros: /tSIMON PATTERSON
+RiverLands: 	
+******************************
+RiverLands: /tOLUWAFEMI SULE
+Dorne: 	
+************************************************************
+Living Space
+******************************King'sLanding
+******************************BeyondTheWall
+******************************
+BeyondTheWall: /tOLUWAFEMI SULE
+
+BeyondTheWall: /tTANA LOPEZ
+TheNorth
+******************************
+TheNorth: /tSIMON PATTERSON
+Volantis
+******************************CasterlyRock
+******************************WinterFell
+******************************
+WinterFell: /tMARI LAWRENCE

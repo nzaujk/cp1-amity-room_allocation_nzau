@@ -2,7 +2,7 @@
 
 
 class Room(object):
-    def __init__(self, room_name=None, room_type=None, capacity=None):
+    def __init__(self, room_name=None, room_type=None, capacity=0):
         self.room_name = room_name
         self.capacity = capacity
         self.room_type = room_type

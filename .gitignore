@@ -96,3 +96,5 @@ ENV/
 .ropeproject
 
 /.idea/
+/cover/
+/room_allocation_db.sqlite

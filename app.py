@@ -2,7 +2,8 @@
 Usage:
     add_person <first_name> <last_name> (fellow|staff) [(y|n)]
     create_room (office|living_space) <room_name>...
-    reallocate_person <first_name> <"last_name"> <new_room>
+    reallocate_person_to_office <first_name> <"last_name"> <room_name>
+    reallocate_person_to_living_space <first_name> <"last_name"> <room_name>
     load_people <filename>
     print_allocations [--o=filename]
     print_unallocated [--o=filename]
@@ -123,7 +124,7 @@ class AmityApplication(cmd.Cmd):
         elif arg["n"]:
             wants_accommodation = "N"
         else:
-            wants_accommodation ="N"
+            wants_accommodation = "N"
         amity_object.add_person(first_name, last_name, role.upper(), wants_accommodation=wants_accommodation)
 
     @docopt_cmd
@@ -136,19 +137,34 @@ class AmityApplication(cmd.Cmd):
             print("File not found")
 
     @docopt_cmd
-    def do_reallocate_person(self, arg):
-        """Usage: reallocate_person <first_name> <last_name> <new_room>"""
+    def do_reallocate_person_to_office(self, arg):
+        """Usage: reallocate_person_to_office <first_name> <last_name> <room_name>"""
         first_name = arg["<first_name>"]
         last_name = arg["<last_name>"]
         full_name = first_name + " " + last_name
-        new_room = arg["<new_room>"]
+        room_name = arg["<room_name>"]
 
-        if new_room.title() in amity_object.office:
-            amity_object.reallocate_person(full_name.title(), new_room)
-        elif new_room.title() in amity_object.living_space:
-            amity_object.reallocate_person(full_name.title(), new_room.title())
+        if room_name in amity_object.office:
+            amity_object.reallocate_person_to_office(first_name,last_name, room_name)
+        elif room_name in amity_object.living_space:
+            amity_object.reallocate_person_to_office(first_name,last_name, room_name)
         else:
-            print('{0}is not a room in Amity' .format(new_room))
+            print('{0}is not a room in Amity' .format(room_name))
+
+    @docopt_cmd
+    def do_reallocate_person_to_living_space(self, arg):
+        """Usage: reallocate_person_to_living_space <first_name> <last_name> <room_name>"""
+        first_name = arg["<first_name>"]
+        last_name = arg["<last_name>"]
+        full_name = first_name + " " + last_name
+        room_name = arg["new_room_name>"]
+
+        if room_name in amity_object.living_space:
+            amity_object.reallocate_person_to_living_space(full_name.upper(), room_name)
+        elif room_name in amity_object.living_space:
+            amity_object.reallocate_person_to_living_space(full_name.upper(), room_name)
+        else:
+            print('{0}is not a room in Amity'.format(room_name))
 
     @docopt_cmd
     def do_print_room(self, arg):
