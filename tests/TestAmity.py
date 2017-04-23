@@ -28,18 +28,22 @@ class TestAmity(unittest.TestCase):
             sys.stdout, sys.stderr = old_out, old_err
 
     def test_is_fellow(self):
+        """test that that fellow is an instance of Person class"""
         is_fellow = Person("Joe", "Irungu", "fellow")
         self.assertEqual(is_fellow.role, "fellow")
 
     def test_is_staff(self):
+        """test that staff is an instance of Person class"""
         is_staff = Person("Jack", "Kamau", "staff")
         self.assertEqual(is_staff.role, "staff")
 
     def test_office(self):
+        """test that office takes 6 spaces"""
         self.test_office = Office("Bravos")
         self.assertEqual(self.test_office.capacity, 6)
 
     def test_living_space(self):
+        """test that living space takes space of 4 """
         self.test_living_space = LivingSpace("Volantis")
         self.assertEqual(self.test_living_space.capacity, 4)
 
@@ -64,6 +68,7 @@ class TestAmity(unittest.TestCase):
         self.assertEqual("operation not successful",self.test_amity.create_room("office", ["Westeros", "Pintos"]))
 
     def test_add_person_fellow_and_allocate_ls_and_office(self):
+        """add person function will also allocate space to staff and fellow"""
         self.test_amity.create_room("office", ["Meskel Square"])
         self.test_amity.create_room("living_space", ["Torailhoch"])
         self.assertEqual(self.test_amity.add_person("Wangeci", "Mbogo", "fellow", "y"),
@@ -81,20 +86,10 @@ class TestAmity(unittest.TestCase):
                                           " Living space allocation not successful")
 
     def test_person_is_not_duplicate(self):
+        """Test that names are not duplicated when added"""
         self.test_amity.add_person("Mercy", "Ogutu", "staff")
         self.assertEqual(self.test_amity.add_person("Mercy", "Ogutu","fellow"),
                          'operation not successful')
-
-    # def test_add_unallocated_living_space(self):
-    #     self.assertEqual( self.test_amity.add_person("Kevin", "Tuju", "fellow"), "operation successful")
-
-    # def test_add_unallocated_office_staff(self):
-    #
-    #     self.assertEqual(self.test_amity.add_person("Mercy", "Mwongeli", "staff"), "operation successful")
-
-    # def test_add_unallocated_office_fellow(self):
-    #
-    #     self.assertEqual(self.test_amity.add_person("Maria", "Mwongeli", "fellow"), "operation successful")
 
     def test_random_generating_office_room(self):
         self.test_amity.create_room('office', ["WinterFell"])
@@ -110,6 +105,8 @@ class TestAmity(unittest.TestCase):
         self.assertIn(random_living_space, self.test_amity.living_space)
 
     def test_it_does_not_reallocate_to_a_full_office(self):
+        """Populate the rooms and add a 7 th person test if reallocate does not
+        realllocate to a full room"""
         self.test_amity.create_room("office",["Stone Town"])
         self.test_amity.add_person("Mike","Mwaniki","staff")
         self.test_amity.add_person("Lilian","Wanjiru","staff")
@@ -157,6 +154,7 @@ class TestAmity(unittest.TestCase):
                          "operation not successful.reallocating to same place")
 
     def test_it_reallocates_to_office_successfully(self):
+        """Test that the reallocation is successful"""
         self.test_amity.add_person("Beza", "Shewarega","staff")
         self.test_amity.create_room("office", ["Ledeta"])
         self.assertEqual(self.test_amity.reallocate_person_to_office("Beza","Shewarega","Ledeta"),
@@ -196,6 +194,7 @@ class TestAmity(unittest.TestCase):
                          "Office not successful.Added to unallocated list")
 
     def test_add_person_not_a_valid_role(self):
+        """test that function does not accept other roles except staff and fellow"""
         self.assertEqual(self.test_amity.add_person("Wambui","Kamau","client"), "not a valid role")
 
     def test_print_unallocated(self):

@@ -98,3 +98,6 @@ ENV/
 /.idea/
 /cover/
 /room_allocation_db.sqlite
+/.coveragerc
+/.coverage
+/.coveralls.yml
