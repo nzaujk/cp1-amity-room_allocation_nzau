@@ -116,16 +116,16 @@ class AmityApplication(cmd.Cmd):
         first_name = arg["<first_name>"]
         last_name = arg["<last_name>"]
         if arg["fellow"]:
-            role = "FELLOW"
+            role = "fellow"
         if arg["staff"]:
-            role = "STAFF"
+            role = "staff"
         if arg["y"]:
-            wants_accommodation = "Y"
+            wants_accommodation = "y"
         elif arg["n"]:
-            wants_accommodation = "N"
+            wants_accommodation = "n"
         else:
-            wants_accommodation = "N"
-        amity_object.add_person(first_name, last_name, role.upper(), wants_accommodation=wants_accommodation)
+            wants_accommodation = "n"
+        amity_object.add_person(first_name, last_name, role.lower(), wants_accommodation=wants_accommodation)
 
     @docopt_cmd
     def do_load_people(self, arg):
@@ -160,9 +160,9 @@ class AmityApplication(cmd.Cmd):
         room_name = arg["new_room_name>"]
 
         if room_name in amity_object.living_space:
-            amity_object.reallocate_person_to_living_space(full_name.upper(), room_name)
+            amity_object.reallocate_person_to_living_space(full_name.title(), room_name)
         elif room_name in amity_object.living_space:
-            amity_object.reallocate_person_to_living_space(full_name.upper(), room_name)
+            amity_object.reallocate_person_to_living_space(full_name.title(), room_name)
         else:
             print('{0}is not a room in Amity'.format(room_name))
 

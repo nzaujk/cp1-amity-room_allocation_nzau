@@ -1,6 +1,9 @@
 
 import os
 import unittest
+import sys
+from io import StringIO
+from contextlib import contextmanager
 from modules.amity import Amity
 from modules.person import *
 from modules.room import Room,Office,LivingSpace
@@ -11,15 +14,26 @@ class TestAmity(unittest.TestCase):
     def setUp(self):
         self.test_amity = Amity()
         self.test_person = Person
+        # self.test_ls = LivingSpace
         self.test_room = Room
-        self.create_ls = self.test_amity.create_room("living_room",["Braavos"])
-        self.office = self.test_amity.create_room("office", ["Valyris"])
+
         self.add_staff = self.test_amity.add_person("Miriam", "Yonga", "staff","y")
+        self.add_fellow = self.test_amity.add_person("Miriam", "Yonga", "fellow", "y")
+        self.test_amity.room_directory = {'living_space':[LivingSpace('KingsLanding'),
+                                                         LivingSpace('OldTown')],'office': [Office('Pintos'),
+                                                        Office('Westeros'), Office('OldValyris')]}
 
 
-    def tearDown(self):
-        del self.create_ls
-        del self.office
+    @contextmanager
+    def captured_output(self):
+
+        new_out, new_err = StringIO(), StringIO()
+        old_out, old_err = sys.stdout, sys.stderr
+        try:
+            sys.stdout, sys.stderr = new_out, new_err
+            yield sys.stdout, sys.stderr
+        finally:
+            sys.stdout, sys.stderr = old_out, old_err
 
     def test_is_fellow(self):
         is_fellow = Person("Joe", "Irungu", "fellow")
@@ -27,7 +41,7 @@ class TestAmity(unittest.TestCase):
 
     def test_is_staff(self):
         is_staff = Person("Jack", "Kamau", "staff")
-        self.assertEqual(is_staff.role, "STAFF")
+        self.assertEqual(is_staff.role, "staff")
 
     def test_office(self):
         self.test_office = Office("Bravos")
@@ -41,45 +55,52 @@ class TestAmity(unittest.TestCase):
         """
         This is testing for when a user creates living spaces
         """
-        self.room_name = self.create_ls
-        self.assertEqual(len(self.test_amity.room_directory),1)
+
+        self.assertEqual(self.test_amity.create_room("living_space", ["Itajuba"]),
+                         "operation successful")
 
     def test_create_office(self):
         """
         This is testing for when a user creates offices
         """
-        self.new_office = self.office
-        self.assertEqual(len(self.test_amity.room_directory), 1)
 
-    def test_room_name_exists(self):
+        self.assertEqual(self.test_amity.create_room("office", ["Valyris"]),"operation successful")
+
+    def test_room_name_already_exists(self):
         """check if the new room name already exists"""
-        self.room_name = self.test_amity.create_room('office',["KingTown"])
-        room = self.test_amity.room_directory["KingTown"]
-        self.assertEqual(self.room_name, room)
+        self.test_amity.create_room("office", ["Westeros", "Pintos"])
+        self.assertEqual("operation not successful",self.test_amity.create_room("office", ["Westeros", "Pintos"]))
 
-    def test_add_person_fellow(self):
-        self.test_amity.add_person("Mercy", "Magda", "fellow","y")
-        self.assertEqual(len(self.test_amity.fellow), 1)
+    def test_add_person_fellow_and_allocate_ls_and_office(self):
+        self.test_amity.create_room("living_space", ["Netherealmn"])
+        self.create_office = self.test_amity.create_room("office", ["Valyris"])
+        self.assertEqual(self.test_amity.add_person("Miriam", "Magda", "fellow", "y"), "operation successful")
 
-    def test_add_person_staff(self):
-        self.test_amity.add_person("Pauline", "Magda", "STAFF")
-        self.assertEqual(len(self.test_amity.staff), 2)
+    def test_add_person_staff_and_allocate_office(self):
+        self.create_office = self.test_amity.create_room("office", ["Valyris"])
+        self.assertEqual(self.test_amity.add_person("Pauline", "Magda", "staff"),
+                         "operation successful")
 
     def test_staff_cannot_be_allocated_living_space(self):
-        self.new_staff = self.add_staff
-        self.assertEqual(self.new_staff, 'Staff cannot be allocated a living_space')
+        self.test_amity.create_room("office", ["Pinto"])
+        self.assertEqual(self.test_amity.add_person("Joe", "Ouma", "staff","y"),
+                                          "Office allocation successful. Living space allocation not successful")
 
     def test_person_is_not_duplicate(self):
-        self.test_amity.check_add_person_duplicate("Mike","Mbuvi")
-        self.assertEqual(len(self.test_amity.employees), 0, '{0} is already in the system.')
+        self.test_amity.add_person("Mercy", "Ogutu", "staff")
+        self.assertEqual(self.test_amity.add_person("Mercy", "Ogutu","fellow"),
+                         'operation not successful')
 
-    def test_add_unallocated_living_space(self):
-        self.test_amity.add_person("Kevin", "Tuju", "FELLOW", "Y")
-        self.assertEqual(len(self.test_amity.unallocated_living_space), 1, "Added Kevin Tuju to the unallocated list")
+    # def test_add_unallocated_living_space(self):
+    #     self.assertEqual( self.test_amity.add_person("Kevin", "Tuju", "fellow"), "operation successful")
 
-    def test_add_unallocated_office(self):
-        self.test_amity.add_person("Mercy", "Mwongeli", "STAFF",)
-        self.assertEqual(len(self.test_amity.unallocated_office), 1, "Added Mercy Mwongeli to the unallocated list")
+    # def test_add_unallocated_office_staff(self):
+    #
+    #     self.assertEqual(self.test_amity.add_person("Mercy", "Mwongeli", "staff"), "operation successful")
+
+    # def test_add_unallocated_office_fellow(self):
+    #
+    #     self.assertEqual(self.test_amity.add_person("Maria", "Mwongeli", "fellow"), "operation successful")
 
     def test_random_generating_office_room(self):
         self.test_amity.create_room('office', ["WinterFell"])
@@ -88,37 +109,94 @@ class TestAmity(unittest.TestCase):
         self.assertIn(random_office, self.test_amity.office)
 
     def test_random_generating_living_space(self):
-        self.random_living_space = self.test_amity.generating_random_living_space()
-        self.assertIn(self.random_living_space, self.test_amity.living_space)
 
-    def test_reallocation_to_office(self):
-        self.test_amity.create_room('office', ['Volantis'])
-        self.test_amity.add_person('Steve', 'Kwamboka', 'FELLOW', 'Y')
-        self.assertIn('Steve Kwamboka', self.test_amity.office['Volantis'])
-        self.test_amity.create_room('office', ['Netherealmn'])
-        self.test_amity.reallocate_person_to_office('Steve Kwamboka','Netherealmn')
-        self.assertIn('Steve Kwamboka', self.test_amity.office['Netherealmn'])
-        self.assertNotIn('Steve Kwamboka', self.test_amity.office['Volantis'])
+        self.test_amity.create_room('living_space', ["Namibia"])
+        self.test_amity.create_room('living_space', ['Kaldys'])
+        random_living_space = self.test_amity.generating_random_living_space()
+        self.assertIn(random_living_space, self.test_amity.living_space)
 
-    def test_reallocation_to_living_space(self):
-        self.test_amity.create_room('living_space', ['Shire'])
-        self.test_amity.add_person('Mercy', 'Flavia', 'FELLOW', 'Y')
-        self.assertIn('Mercy Flavia', self.test_amity.living_space['Shire'])
-        self.test_amity.create_room('living_space', ['Modor'])
-        self.test_amity.reallocate_person_to_living_space('Mercy Flavia','Modor')
-        self.assertIn('Mercy Flavia', self.test_amity.living_space['Modor'])
-        self.assertNotIn('Mercy Flavia', self.test_amity.living_space['Shire'])
+    def test_it_does_not_reallocate_to_a_full_office(self):
+        self.test_amity.create_room("office",["Stone Town"])
+        self.test_amity.add_person("Mike","Mwaniki","staff")
+        self.test_amity.add_person("Lilian","Wanjiru","staff")
+        self.test_amity.add_person("Yvonne", "Makena", "fellow")
+        self.test_amity.add_person("Mwikali", "Mwende", "fellow")
+        self.test_amity.add_person("Mustafa","Ahmed","staff")
+        self.test_amity.add_person("Moses","Makeni","fellow")
+        self.test_amity.add_person("Miriam", "Salome ", "staff")
+        """reallocating new member after poplating the office"""
+        self.assertEqual(self.test_amity.reallocate_person_to_office("Miriam","Salome ","Stone Town"),
+                         "operation not successful.room is full")
 
-    def test_it_does_not_reallocate_none_existent_room(self):
+    def test_it_does_not_reallocate_to_a_full_living_space(self):
+        self.test_amity.create_room("living_space",["Nungwi"])
+        self.test_amity.add_person("Mike","Mwaniki","fellow","y")
+        self.test_amity.add_person("Lilian","Wanjiru","fellow", "y")
+        self.test_amity.add_person("Yvonne", "Makena", "fellow", "y")
+        self.test_amity.add_person("Mwikali", "Mwende", "fellow","y")
 
-        self.test_amity.add_person('Miriam', 'Cate', 'Fellow')
-        response = self.test_amity.reallocate_person_to_office('office', ['Ubuntu'])
-        self.assertEqual(response, "Miriam Cate is already allocated to Ubuntu")
+        self.assertEqual(self.test_amity.reallocate_person_to_living_space("Mwikali","Mwende","Nungwi"),
+                         "operation not successful.room is full")
+
+    def test_it_does_not_reallocate_to_none_existing_office(self):
+        self.test_amity.add_person("Winnie", "Chebet", "fellow", "y")
+
+        self.assertEqual(self.test_amity.reallocate_person_to_office("Winne","Chebet","NewCabin"),
+                         "operation not successful.room does not exist")
+
+    def test_it_does_not_reallocate_to_the_same_office(self):
+        self.test_amity.create_room("office", ["Shire"])
+        self.test_amity.add_person("Maina", "Chege", "staff")
+        self.assertEqual(self.test_amity.reallocate_person_to_office("Maina", "Chege", "Shire"),
+                         "operation not successful.reallocating to same place")
+
+    def test_it_does_not_reallocate_to_the_same_living_space(self):
+        self.test_amity.create_room("living_space", ["Shire"])
+        self.test_amity.add_person("Maina", "Chege", "fellow","y")
+        self.assertEqual(self.test_amity.reallocate_person_to_living_space("Maina","Chege","Shire"),
+                         "operation not successful.reallocating to same place")
+
+    def test_it_does_not_reallocate_to_none_existing_living_space(self):
+        self.test_amity.add_person("Winnie", "Chebet", "fellow", "y")
+
+        self.assertEqual(self.test_amity.reallocate_person_to_office("William","Chebet","NewTown"),
+                         "operation not successful.room does not exist")
+
+    def test_fellow_added_to_unallocated_space_if_no_office_available(self):
+        self.test_amity.create_room("living_space", ["OldValyris"])
+        self.assertEqual(self.test_amity.add_person("Miriam","Wangui", "fellow", "y"),
+                         "operation successful but added to unallocated list")
+
+    def test_fellow_added_to_unallocated_space_if_no_living_available(self):
+        self.test_amity.create_room("office", ["Mariabi"])
+        self.assertEqual(self.test_amity.add_person("Olivia", "Ferel", "fellow", "y"),
+                         "operation successful but added to unallocated list")
+
+    def test_fellow_added_to_unallocated_space_if_both_no_living_available_or_office_available(self):
+        self.assertEqual(self.test_amity.add_person("Olivia", "Ferel", "fellow", "y"),
+                         "Operation not successful.Added to unallocated")
+
+    def test_fellow_added_to_unallocated_space_if_they_choose_n(self):
+        self.assertEqual(self.test_amity.add_person("Olivia", "Ferel", "fellow", "n"),
+                         "operation successful:unallocated list")
+
+    def test_fellow_added_to_unallocated_space_if_they_choose_n_and_no_office_available(self):
+        self.test_amity.create_room("office", ["OldCity"])
+        self.assertEqual(self.test_amity.add_person("Olivia", "Ferel", "fellow", "n"),
+                         "operation successful")
+
+    def test_staff_added_to_unallocated_space_if_no_office_available(self):
+        self.assertEqual(self.test_amity.add_person("Miriam","Wangui", "staff"),
+                         "Office not successful.Added to unallocated list")
+
+    def test_add_person_not_a_valid_role(self):
+        self.assertEqual(self.test_amity.add_person("Wambui","Kamau","client"), "not a valid role")
 
     def test_file_path(self):
-        self.test_amity.load_people("amity_load")
-        self.assertTrue(os.path.exists("amity_load.txt"))
-        os.remove("amity_load")
+
+        self.test_amity.load_people("amity_load.txt")
+        self.assertTrue(os.path.isfile("amity_load.txt"))
+        os.remove("amity_load.txt")
 
     def test_print_unallocated(self):
         self.test_amity.print_unallocated('file')
@@ -132,12 +210,16 @@ class TestAmity(unittest.TestCase):
 
     def test_print_rooms(self):
         self.test_amity.print_rooms('filename')
-        self.assertTrue(os.path.isfile('file.txt'))
-        os.remove('file.txt')
+        self.assertTrue(os.path.isfile('file'))
+        os.remove('file')
 
     def test_saves_state(self):
         self.test_amity.save_state('amity_db')
         self.assertTrue(os.path.isfile('amity_db.sqlite'))
+
+    def test_load_state(self):
+        result = self.test_amity.load_state(self)
+        self.assertEqual(result, "operation successful")
 
 
 if __name__ == '__main__':

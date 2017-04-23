@@ -1,0 +1,39 @@
+##############################
+Office
+##############################OldTown: 	
+******************************
+OldTown: /tSimon Patterson
+OldValyria: 	
+******************************
+OldValyria: /tKelly Mcguire
+Braavos: 	
+******************************
+Braavos: /tLeigh Riley
+Westeros: 	
+******************************
+Westeros: /tOluwafemi Sule
+
+Westeros: /tDominic Walters
+
+Westeros: /tMari Lawrence
+RiverLands: 	
+******************************Dorne: 	
+******************************
+Dorne: /tTana Lopez
+******************************
+Living Space
+******************************King'sLanding
+******************************BeyondTheWall
+******************************
+BeyondTheWall: /tMari Lawrence
+TheNorth
+******************************
+TheNorth: /tTana Lopez
+Volantis
+******************************CasterlyRock
+******************************
+CasterlyRock: /tOluwafemi Sule
+
+CasterlyRock: /tSimon Patterson
+WinterFell
+******************************
