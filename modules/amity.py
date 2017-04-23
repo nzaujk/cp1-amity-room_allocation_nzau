@@ -5,7 +5,6 @@ to create rooms,add people and allocate/reallocate rooms"""
 import random
 from sqlalchemy.sql import select
 from collections import defaultdict
-from termcolor import cprint, colored
 from modules.room import LivingSpace,Office
 from modules.person import Fellow, Staff
 from db.amity_db import Base, AmityDatabaseLoad,PersonDB,RoomDB,OfficeDB,\
@@ -29,7 +28,7 @@ class Amity (object):
     def create_room(self, room_type, room_name):
         """Check room does not exist."""
         for room in room_name:
-            if room in self.room_directory:
+            if room in self.office or room in self.living_space:
                 print("The room Exists")
                 return "operation not successful"
 
@@ -213,21 +212,21 @@ class Amity (object):
         else:
             print('No living spaces available.Please try later')
 
-
-    def print_rooms(self, room_name):
+    def print_rooms(self,room_name):
         """print all the members from a given room"""
         display_office = [office for office in self.office if office != ""]
         display_living_spaces = [living_space for living_space in self.living_space if living_space != ""]
-        if room_name.title() not in display_office and room_name.title() not in display_living_spaces:
+        if room_name.title() not in display_office or room_name.title() not in display_living_spaces:
             print("The room does not exist. Please check you entered the correct entry")
+            return "room does not exist"
         else:
             print("Occupants List")
             if room_name.title() in display_office:
                 for person in self.office[room_name.title()]:
                     print(person)
+
             elif room_name.title() in display_living_spaces:
                 for person in self.living_space[room_name.title()]:
-
                     print(person)
 
     def print_allocations(self, filename=None):
@@ -256,7 +255,7 @@ class Amity (object):
 
         if filename:
             print("-" * 30 + "\n" + "Office Allocations"+ "\n" + "-" * 30)
-            file = open(filename + ".txt", "a")
+            file = open(filename + ".txt", "w")
             file.write("#" * 30 + "\n" + "Office"+"\n" + "#" * 30)
 
             print("-" * 30 + "\n" + "Living Space Allocations" + "\n"+ "-" * 30)
@@ -279,36 +278,43 @@ class Amity (object):
         """Print unallocated in office"""
         room =""
         for room in self.unallocated_office:
-            print(room + "\n" + "*" * 30)
+            # print(room + "\n" + "*" * 30)
             if room:
                 for person in self.unallocated_office[room]:
-                    print(person)
-                    print("\n")
+                    print("+" * 30)
+                    print(room + ": \t" + person + " \n")
+                    print("+" * 30)
+                print("\n")
+
         for room in self.unallocated_living_space:
-            print(room + "\n" + "*" * 30)
+            # print(room + "\n" + "*" * 30)
             if room:
                 for person in self.unallocated_living_space[room]:
-                    print(person)
+                    print("+" * 30)
+                    print(room + ": \t" + person + " \n")
+                    print("+" * 30)
                 print("\n")
         if not room:
             print("\n The list is empty")
         if filename:
-            print("*" * 60 + "\n" + "Unallocated members: Office Space\n" + "*" * 60)
-            file = open(filename + ".txt", "a")
+            print("*" * 30 + "\n" + "Unallocated members: Office Space\n" + "*" * 30)
+            file = open(filename + ".txt", "w")
             file.write("*" * 30 + "\n" + "Office\n" + "*" * 30)
-
-            print("*" * 60 + "\n" + "Unallocated members: Living Space"+ "\n" + "*" * 60)
-            for room in self.unallocated_office.keys():
+            print("*" * 30 + "\n" + "Living Space Allocations" + "\n" + "*" * 30)
+            print("*" * 30 + "\n" + "Unallocated members: Living Space" + "\n" + "*" * 30)
+            # changed the .keys
+            for room in self.unallocated_office[room].occupants:
                #changed not equal from none
                 if room != "":
                     file.write(room + "\n" + "*" * 60)
                     for person in self.unallocated_office[room]:
                         file.write(person)
-            file.write("*" * 60 + "\n" + "Living Space"+"\n" + "*" * 60)
-            for room in self.unallocated_living_space.keys():
+            file.write("*" * 30 + "\n" + "Living Space"+"\n" + "*" * 30)
+            #changed the .keys
+            for room in self.unallocated_living_space[room].occupants:
                 # changed not equal from none
                 if room != "":
-                    file.write(room + "\n" + "*" * 60)
+                    file.write(room + "\n" + "*" * 30)
                     for person in self.unallocated_living_space[room]:
                         file.write(person)
 
@@ -362,7 +368,6 @@ class Amity (object):
 
         people = select([PersonDB])
         result = db_load.session.execute(people)
-
         for person in result.fetchall():
             name = person.name
             role = person.role
@@ -412,7 +417,8 @@ class Amity (object):
         print(" {0} loaded successfully." .format(db_name))
         return "operation successful"
 
-    def save_state(self, db_name='default_db'):
+
+def save_state(self, db_name='default_db'):
             '''
             Saves the data in the app to the database
             '''

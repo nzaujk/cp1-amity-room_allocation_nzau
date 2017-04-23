@@ -10,7 +10,7 @@ script:
   - nosetests --with-coverage --cover-erase --cover-package=modules
 
 after_success:
-  - echo "choose one"
+  - python-codacy-coverage -r coverage.xml
 
 cache: pip
 

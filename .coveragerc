@@ -1,0 +1,6 @@
+
+[run]
+branch = False
+omit = *termcolor*,*sqlalchemy*, *decimal.py*, *numbers.py*, *sqlite3.py*
+
+

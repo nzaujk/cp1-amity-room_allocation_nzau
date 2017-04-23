@@ -1,7 +1,10 @@
+import os
+import sys
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session,relationship, query
 
 
 Base = declarative_base()
@@ -63,6 +66,7 @@ class AmityDatabaseLoad(object):
         self.engine = create_engine('sqlite:///' + self.db_name)
         self.session = sessionmaker()
         self.session.configure(bind=self.engine)
+        self.db_session = Session()
 
         # create object to manage the tables
         Base.metadata.create_all(self.engine)
