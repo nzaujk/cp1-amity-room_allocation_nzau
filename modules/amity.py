@@ -217,19 +217,21 @@ class Amity (object):
         display_office = [office.title() for office in self.office if office != ""]
         display_living_spaces = [living_space.title() for living_space in self.living_space if living_space != ""]
         all_display_spaces = display_living_spaces + display_office
+        try:
+            if room_name.title() not in all_display_spaces:
+                print("The room does not exist. Please check you entered the correct entry")
+                return "room does not exist"
+            else:
+                print("Occupants List")
+                if room_name.title() in display_office:
+                    for person in self.office[room_name].occupants:
+                        print(person)
 
-        if room_name.title() not in all_display_spaces:
-            print("The room does not exist. Please check you entered the correct entry")
-            return "room does not exist"
-        else:
-            print("Occupants List")
-            if room_name.title() in display_office:
-                for person in self.office[room_name.title()].occupants:
-                    print(person)
-
-            elif room_name.title() in display_living_spaces:
-                for person in self.living_space[room_name.title()].occupants:
-                    print(person)
+                elif room_name.title() in display_living_spaces:
+                    for person in self.living_space[room_name].occupants:
+                        print(person)
+        except:
+            return "Invalid"
 
     def print_allocations(self, filename=None):
         """Prints all the people who have rooms"""
@@ -304,17 +306,16 @@ class Amity (object):
             file.write("*" * 30 + "\n" + "Office\n" + "*" * 30)
             print("*" * 30 + "\n" + "Living Space Allocations" + "\n" + "*" * 30)
             print("*" * 30 + "\n" + "Unallocated members: Living Space" + "\n" + "*" * 30)
-            # changed the .keys
             for room in self.unallocated_office[room].occupants:
-               #changed not equal from none
+
                 if room != "":
                     file.write(room + "\n" + "*" * 60)
                     for person in self.unallocated_office[room]:
                         file.write(person)
             file.write("*" * 30 + "\n" + "Living Space"+"\n" + "*" * 30)
-            #changed the .keys
+
             for room in self.unallocated_living_space[room].occupants:
-                # changed not equal from none
+
                 if room != "":
                     file.write(room + "\n" + "*" * 30)
                     for person in self.unallocated_living_space[room]:
@@ -355,9 +356,11 @@ class Amity (object):
                         room_name = rooms[1]
                         self.create_room(room_type, [room_name])
                     else:
-                        print('The file is not readable. ')
+                        print('The file is not readable.')
+
         else:
             print('Please ensure the file is valid')
+            return "invalid file"
 
     def load_state(self,db_name):
         if db_name:
@@ -419,69 +422,71 @@ class Amity (object):
         print(" {0} loaded successfully." .format(db_name))
         return "operation successful"
 
-def save_state(self, db_name='default_db'):
-            '''
-            Saves the data in the app to the database
-            '''
-            if db_name:
-                db_load = AmityDatabaseLoad(db_name)
-            else:
-                db_load = AmityDatabaseLoad('default_db')
+    def save_state(self, db_name='amity_db'):
+        if db_name:
+            db_load = AmityDatabaseLoad(db_name)
+        else:
+            db_load = AmityDatabaseLoad('amity__db')
 
-            Base.metadata.bind = db_load.engine
+        Base.metadata.bind = db_load.engine
 
-            db_session = db_load.session
+        db_session = db_load.session
 
-            #save people to database
-            people_in_db = select([PersonDB])
-            result = db_session.execute(people_in_db)
-            people_list = [item.name for item in result]
+        # save people to database
+        person_in_db = select([PersonDB])
+        result = db_session.execute(person_in_db)
+        people_list = [item.name for item in result]
 
-            for full_name, role in self.employees.items():
-                if full_name not in people_list:
-                    new_person = PersonDB(name=full_name, role=role)
-                    db_load.session.add(new_person)
-                    db_load.session.commit()
+        for full_name, role in self.employees.items():
+            if full_name not in people_list:
+                new_person = PersonDB(name=full_name, role=role)
+                db_load.session.merge(new_person)
+                db_load.session.commit()
+        # saves the rooms to database
+        rooms_in_db = select([RoomDB])
+        result = db_load.session.execute(rooms_in_db)
+        rooms_list = [item.room_name for item in result]
 
-            # saves the rooms to database
-            rooms_in_db = select([RoomDB])
-            result = db_load.session.execute(rooms_in_db)
-            rooms_list = [item.room_name for item in result]
+        for room, room_type in self.room_directory.items():
+            if room not in rooms_list:
+                new_name = RoomDB(room_name=room, room_type=room_type)
+                db_load.session.merge(new_name)
+                db_load.session.commit()
 
-            for room, room_type in self.room_directory.items():
-                if room not in rooms_list:
-                    new_name = RoomDB(room_name=room, room_type=room_type)
-                    db_load.session.add(new_name)
-                    db_load.session.commit()
+        # saves the people in offices
+        person_in_office = select([OfficeDB])
+        result = db_load.session.execute(person_in_office)
+        office_occupants_list = [person.occupants for person in result]
 
-            #saves the people in offices
-            people_in_office = select([OfficeDB])
-            result = db_load.session.execute(people_in_office)
-            office_people_list = [person.occupants for person in result]
-            for room, occupants in self.office.items():
-                for occupant in occupants:
-                    if occupant not in office_people_list:
-                        room_name = OfficeDB(room_name=room, occupants=occupant)
-                        db_load.session.add(room_name)
-                        db_load.session.commit()
-
-            #saves the people in livingspace
-            people_in_ls = select([LivingSpaceDB])
-            result = db_load.session.execute(people_in_ls)
-            ls_people_list = [person.occupants for person in result]
-            for room, occupants in self.living_space.items():
-                for occupant in occupants:
-                    if occupant not in ls_people_list:
-                        new_room = LivingSpaceDB(room_name=room, occupants=occupant)
-                        db_load.session.add(new_room)
-                        db_load.session.commit()
-
-            #saves the fellow who are not allocated a livingspace
-            unallocated_people = select([UnallocatedDB])
-            result = db_load.session.execute(unallocated_people)
-            unallocated_people_list = [person.name for person in result]
-            for person in self.unallocated_living_space:
-                if person not in unallocated_people_list:
-                    room_name = UnallocatedDB(name=person)
+        for room,people in self.office.items():
+            for occupant in people.occupants:
+                if occupant not in office_occupants_list:
+                    room_name = OfficeDB(room_name=room, occupants=occupant)
                     db_load.session.add(room_name)
                     db_load.session.commit()
+                    print("Data Saved")
+                return "saved status"
+        # save people in living_space
+        person_in_living_space = select([LivingSpaceDB])
+        result = db_load.session.execute(person_in_living_space)
+        living_space_occupants_list = [person.occupants for person in result]
+        for room, people in self.living_space.items():
+            for occupant in people.occupants:
+                if occupant not in living_space_occupants_list:
+                    new_room = LivingSpaceDB(room_name=room, occupants=occupant)
+                    db_load.session.add(new_room)
+                    db_load.session.commit()
+
+
+        # saves the fellow who are not allocated a livingspace
+        unallocated_people = select([UnallocatedDB])
+        result = db_load.session.execute(unallocated_people)
+        unallocated_people_list = [person.name for person in result]
+        for person in self.unallocated_living_space:
+            if person not in unallocated_people_list:
+                room_name = UnallocatedDB(name=person)
+                db_load.session.add(room_name)
+                db_load.session.commit()
+                print("saved")
+            return "saved status"
+

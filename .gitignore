@@ -101,3 +101,5 @@ ENV/
 /.coveragerc
 /.coverage
 /.coveralls.yml
+/cp1.sqlite
+/cpsave.sqlite

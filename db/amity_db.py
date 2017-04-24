@@ -61,9 +61,9 @@ class AmityDatabaseLoad(object):
             self.db_name = 'room_allocation_db.sqlite'
         # create an SQLEngine object to handle the connection
         self.engine = create_engine('sqlite:///' + self.db_name)
-        self.session = sessionmaker()
-        self.session.configure(bind=self.engine)
-        self.db_session = Session()
+        # self.session = sessionmaker()
+        # self.session.configure(bind=self.en)
+        self.session = Session(bind=self.engine)
 
         # create object to manage the tables
         Base.metadata.create_all(self.engine)

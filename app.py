@@ -24,7 +24,7 @@ from termcolor import cprint, colored
 from pyfiglet import figlet_format
 from docopt import docopt, DocoptExit
 from modules.amity import Amity
-from db.amity_db import *
+
 
 amity_object = Amity()
 

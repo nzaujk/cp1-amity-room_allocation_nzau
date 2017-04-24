@@ -1,0 +1,39 @@
+##############################
+Office
+##############################OldTown: 	
+******************************
+OldTown: 	Dominic Walters
+OldValyria: 	
+******************************
+OldValyria: 	Simon Patterson
+
+OldValyria: 	Mari Lawrence
+
+OldValyria: 	Tana Lopez
+Braavos: 	
+******************************
+Braavos: 	Oluwafemi Sule
+Westeros: 	
+******************************RiverLands: 	
+******************************
+RiverLands: 	Leigh Riley
+
+RiverLands: 	Kelly Mcguire
+Dorne: 	
+************************************************************
+Living Space
+******************************King'sLanding
+******************************BeyondTheWall
+******************************
+BeyondTheWall: 	Mari Lawrence
+TheNorth
+******************************
+TheNorth: 	Tana Lopez
+Volantis
+******************************
+Volantis: 	Simon Patterson
+CasterlyRock
+******************************
+CasterlyRock: 	Oluwafemi Sule
+WinterFell
+******************************
