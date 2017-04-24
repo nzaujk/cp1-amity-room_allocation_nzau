@@ -212,21 +212,23 @@ class Amity (object):
         else:
             print('No living spaces available.Please try later')
 
-    def print_rooms(self,room_name):
+    def print_rooms(self, room_name):
         """print all the members from a given room"""
-        display_office = [office for office in self.office if office != ""]
-        display_living_spaces = [living_space for living_space in self.living_space if living_space != ""]
-        if room_name.title() not in display_office or room_name.title() not in display_living_spaces:
+        display_office = [office.title() for office in self.office if office != ""]
+        display_living_spaces = [living_space.title() for living_space in self.living_space if living_space != ""]
+        all_display_spaces = display_living_spaces + display_office
+
+        if room_name.title() not in all_display_spaces:
             print("The room does not exist. Please check you entered the correct entry")
             return "room does not exist"
         else:
             print("Occupants List")
             if room_name.title() in display_office:
-                for person in self.office[room_name.title()]:
+                for person in self.office[room_name.title()].occupants:
                     print(person)
 
             elif room_name.title() in display_living_spaces:
-                for person in self.living_space[room_name.title()]:
+                for person in self.living_space[room_name.title()].occupants:
                     print(person)
 
     def print_allocations(self, filename=None):
@@ -274,7 +276,7 @@ class Amity (object):
 
             print("{0}.txt printed" .format(filename))
 
-    def print_unallocated(self, filename):
+    def print_unallocated(self, filename=None):
         """Print unallocated in office"""
         room =""
         for room in self.unallocated_office:
@@ -416,7 +418,6 @@ class Amity (object):
         db_session.close()
         print(" {0} loaded successfully." .format(db_name))
         return "operation successful"
-
 
 def save_state(self, db_name='default_db'):
             '''

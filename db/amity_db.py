@@ -1,10 +1,7 @@
-import os
-import sys
-
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import sessionmaker, Session,relationship, query
+from sqlalchemy.orm import sessionmaker, Session
 
 
 Base = declarative_base()
