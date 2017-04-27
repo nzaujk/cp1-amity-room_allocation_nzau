@@ -2,9 +2,11 @@
 Usage:
     add_person <first_name> <last_name> (fellow|staff) [(y|n)]
     create_room (office|living_space) <room_name>...
-    reallocate_person_to_office <first_name> <"last_name"> <room_name>
-    reallocate_person_to_living_space <first_name> <"last_name"> <room_name>
+    reallocate_person_to_office <first_name> <last_name> <room_name>
+    reallocate_person_to_living_space <first_name> <last_name> <room_name>
+    delete_employee <first_name> <last_name>
     load_people <filename>
+    print_employees (fellow|staff)
     print_allocations [--o=filename]
     print_unallocated [--o=filename]
     print_room <room_name>
@@ -75,6 +77,7 @@ def introduction():
     print("4. load_people <filename>".center(25) + " \t\t \t \t \t \t"+
           "9. save_state [--db=sqlite_database]".center(88))
     print("5. load_rooms <filename>".center(23) + " \t\t \t " + "10.load_state <sqlite_database>".center(105))
+    print("11. delete_employee <delete_employee> <first_name> <last_name>".center(105))
     print(border)
     print("\n")
     print("OPTIONAL COMMANDS:".center(140))
@@ -141,7 +144,6 @@ class AmityApplication(cmd.Cmd):
         """Usage: reallocate_person_to_office <first_name> <last_name> <room_name>"""
         first_name = arg["<first_name>"]
         last_name = arg["<last_name>"]
-        full_name = first_name + " " + last_name
         room_name = arg["<room_name>"]
 
         if room_name in amity_object.office:
@@ -150,6 +152,20 @@ class AmityApplication(cmd.Cmd):
             amity_object.reallocate_person_to_office(first_name,last_name, room_name)
         else:
             print('{0}is not a room in Amity' .format(room_name))
+
+    @docopt_cmd
+    def do_delete_employee(self, arg):
+        """Usage: reallocate_person_to_office <first_name> <last_name>"""
+        first_name = arg["<first_name>"]
+        last_name = arg["<last_name>"]
+        full_name = first_name + " " + last_name
+
+        if full_name in amity_object.fellow:
+            amity_object.delete_employee(first_name.title(), last_name.title())
+        elif full_name in amity_object.staff:
+            amity_object.delete_employee(first_name.title(), last_name.title())
+        else:
+            print('{0}is not in the system'.format(full_name))
 
     @docopt_cmd
     def do_reallocate_person_to_living_space(self, arg):
@@ -171,6 +187,17 @@ class AmityApplication(cmd.Cmd):
         """Usage: print_room <room_name>"""
         room_name = arg["<room_name>"]
         amity_object.print_rooms(room_name)
+
+    @docopt_cmd
+    def do_print_employees(self, arg):
+        """Usage: print_employees (fellow|staff)"""
+        print(arg)
+        if arg["fellow"]:
+            role = "fellow"
+        if arg["staff"]:
+            role = "staff"
+
+        amity_object.print_employees(role)
 
     @docopt_cmd
     def do_print_allocations(self, arg):

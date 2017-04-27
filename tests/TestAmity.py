@@ -197,8 +197,46 @@ class TestAmity(unittest.TestCase):
         """test that function does not accept other roles except staff and fellow"""
         self.assertEqual(self.test_amity.add_person("Wambui","Kamau","client"), "not a valid role")
 
-    def test_print_unallocated(self):
-        self.test_amity.print_unallocated('file.txt')
+    def test_staff_is_deleted_from_office(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("office", ["Piassa"])
+        self.test_amity.add_person("Monica", "Winnie", "staff")
+        remove_person = self.test_amity.delete_employee("Monica","Winnie")
+        self.assertEqual(remove_person, "staff deleted")
+
+    def test_fellow_is_deleted_from_living_space(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("living_space",["Menelik"])
+        self.test_amity.create_room("office", ["Meganagha"])
+
+        self.test_amity.add_person("Bonny", "Khaemba", "fellow", "y")
+        remove_person = self.test_amity.delete_employee("Bonny", "Khaemba",)
+        self.assertEqual(remove_person, "fellow deleted")
+
+    def test_person_is_deleted_from_staff(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("office", ["Ravindel"])
+        self.test_amity.add_person("Mbaire", "Elizabeth", "staff")
+        remove_person = self.test_amity.delete_employee("Mbaire","Elizabeth")
+        self.assertEqual(remove_person, "staff deleted")
+
+    def test_fellow_is_deleted_from_unallocated_living_space(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.add_person("Mbaire", "Elizabeth", "fellow", "y")
+        self.test_amity.create_room("office",["Ravindel"])
+        remove_person = self.test_amity.delete_employee("Mbaire","Elizabeth")
+        self.assertEqual(remove_person, "deleted from unallocated space")
+
+    def test_fellow_is_deleted_from_fellow_db(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("office",["Mexico"])
+        self.test_amity.create_room("living_space", ["Sheromeda"])
+        self.test_amity.add_person("Wambui", "Nganga", "fellow", "y")
+        remove_person = self.test_amity.delete_employee("Wambui","Nganga")
+        self.assertEqual(remove_person, "fellow deleted")
+
+    def test_it_prints_unallocated(self):
+        self.test_amity.print_unallocated('file')
         self.assertTrue(os.path.isfile('file.txt'))
         os.remove('file.txt')
 
@@ -207,19 +245,51 @@ class TestAmity(unittest.TestCase):
         self.assertTrue(os.path.isfile('file.txt'))
         os.remove('file.txt')
 
-    def test_print_rooms(self):
-        self.test_amity.print_rooms('filename')
-        self.assertTrue(os.path.isfile('file'))
-        os.remove('file')
+    def test_print_rooms_doesnt_exist(self):
+        self.test_amity.create_room("living_space", ["Lobu"])
+        self.assertEqual(self.test_amity.print_rooms('GojamBerenda'),
+                         "room does not exist")
 
-    def test_saves_state(self):
+    def test_print_rooms_living_space(self):
+        """test if the function prints the people in a given living space"""
+        self.test_amity.create_room("living_space", ["OldAirport"])
+        self.test_amity.add_person("Moses", "Kioko","fellow", "y")
+        self.assertEqual(self.test_amity.print_rooms("OldAirport"),"person in room")
+
+    def test_print_rooms_office(self):
+        """test if the function prints the people in a given office"""
+        self.test_amity.create_room("office", ["OldAirport"])
+        self.test_amity.add_person("Moses", "Kioko","fellow")
+        self.assertEqual(self.test_amity.print_rooms("OldAirport"),"person in room")
+
+    def test_print_rooms_invalid_name(self):
+        """test if the function returns ans exception when user mispels the name
+        of a room"""
+        self.test_amity.create_room("office", ["OldAirport"])
+        self.test_amity.add_person("Moses", "Kioko","fellow")
+        self.assertEqual(self.test_amity.print_rooms("OldAIrport"),"Invalid")
+
+    def test_saves_state_to_db(self):
+        self.test_amity.create_room("office", ["Mexico"])
         self.test_amity.save_state('amity_db')
         self.assertTrue(os.path.isfile('amity_db.sqlite'))
+        os.remove("amity_db.sqlite")
 
-    def test_load_state(self):
-        result = self.test_amity.load_state(self)
-        self.assertEqual(result, "operation successful")
+    def test_saves_state(self):
+        self.test_amity.create_room("office", ["StGabriels"])
+        self.test_amity.add_person("Tina", "Murimi","staff")
+        self.assertEqual(self.test_amity.save_state('amity_db'), "saved status")
 
+    def test_load_state_to_db(self):
+        self.test_amity.create_room("office", ["Mexico"])
+        self.test_amity.save_state('amity_db')
+        self.test_amity.load_state('amity_db')
+        self.assertTrue(os.path.isfile('amity_db.sqlite'))
+        os.remove("amity_db.sqlite")
+
+    def test_load_state_to_db(self):
+        self.test_amity.create_room("office", ["Mexico"])
+        self.assertEqual(self.test_amity.load_state("amity_db"), "operation successful")
 
 if __name__ == '__main__':
     unittest.main()

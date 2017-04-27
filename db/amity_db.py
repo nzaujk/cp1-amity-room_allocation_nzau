@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session
 
 
 Base = declarative_base()
@@ -58,15 +58,15 @@ class AmityDatabaseLoad(object):
         if self.db_name:
             self.db_name = db_name + ".sqlite"
         else:
-            self.db_name = 'room_allocation_db.sqlite'
+            self.db_name = 'amity_db.sqlite'
         # create an SQLEngine object to handle the connection
-        self.engine = create_engine('sqlite:///' + self.db_name)
+        self.my_engine = create_engine('sqlite:///' + self.db_name)
         # self.session = sessionmaker()
         # self.session.configure(bind=self.en)
-        self.session = Session(bind=self.engine)
+        self.session = Session(bind=self.my_engine)
 
         # create object to manage the tables
-        Base.metadata.create_all(self.engine)
+        Base.metadata.create_all(self.my_engine)
 
 
 
