@@ -443,7 +443,7 @@ class Amity (object):
             self.employees[name] = role
         db_session.close()
 
-        """load rooms from database"""
+        # load rooms from database
         db_room = select([RoomDB])
         result = db_load.session.execute(db_room)
         for room in result.fetchall():
@@ -540,7 +540,6 @@ class Amity (object):
                     new_room = LivingSpaceDB(room_name=room, occupants=occupant)
                     db_load.session.add(new_room)
                     db_load.session.commit()
-
 
         # saves the fellow who are not allocated a livingspace
         unallocated_people = select([UnallocatedDB])
