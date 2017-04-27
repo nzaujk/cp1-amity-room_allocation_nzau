@@ -5,12 +5,14 @@ python:
 
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
 
 script:
   - nosetests --with-coverage --cover-erase --cover-package=modules
 
 after_success:
-  - python-codacy-coverage -r coverage.xml
+    - coveralls
+
 
 cache: pip
 
