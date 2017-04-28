@@ -212,15 +212,6 @@ class TestAmity(unittest.TestCase):
         remove_person = self.test_amity.delete_employee("Monica","Winnie")
         self.assertEqual(remove_person, "staff deleted")
 
-    # def test_fellow_is_deleted_from_living_space(self):
-    #     """test that person is no longer existing after the remove function is called"""
-    #     self.test_amity.create_room("living_space",["Menelik"])
-    #     self.test_amity.create_room("office", ["Meganagha"])
-
-        # self.test_amity.add_person("Bonny", "Khaemba", "fellow", "y")
-        # remove_person = self.test_amity.delete_employee("Bonny", "Khaemba",)
-        # self.assertEqual(remove_person, "fellow deleted")
-
     def test_staff_is_deleted_from_unallocated_office_space(self):
         """test that person is no longer existing after the remove function is called"""
         self.test_amity.add_person("Wendy", "Maina", "staff")

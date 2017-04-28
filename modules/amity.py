@@ -274,7 +274,6 @@ class Amity (object):
 
             else:
                 print("The list is empty")
-                return "empty"
 
     def print_rooms(self, room_name):
         """print all the members from a given room"""
@@ -342,7 +341,6 @@ class Amity (object):
                         file.write("\n" + room + ": \t" + person + "\n")
 
             print("{0}.txt printed" .format(filename))
-            return "printed"
 
     def print_unallocated(self, filename=None):
         """Print unallocated in office"""
@@ -414,7 +412,6 @@ class Amity (object):
 
         else:
             print('Please ensure the file is valid')
-            return "invalid file"
 
     def load_state(self,db_name):
         if db_name:
