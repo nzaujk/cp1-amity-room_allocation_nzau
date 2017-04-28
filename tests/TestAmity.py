@@ -190,8 +190,16 @@ class TestAmity(unittest.TestCase):
                          "operation successful")
 
     def test_staff_added_to_unallocated_space_if_no_office_available(self):
+        """if staff is added but no office is available they should be added to a list
+        of unallocated offices"""
         self.assertEqual(self.test_amity.add_person("Miriam","Wangui", "staff"),
                          "Office not successful.Added to unallocated list")
+
+    def test_staff_added_to_unallocated_space_if_no_office_available(self):
+        """check if staff is still added to unallocated space for office
+        if they choose living space"""
+        self.assertEqual(self.test_amity.add_person("Mary", "Wangui", "staff", "y"),
+                         "Added to unallocated list. Living space allocation not successful")
 
     def test_add_person_not_a_valid_role(self):
         """test that function does not accept other roles except staff and fellow"""
@@ -204,35 +212,52 @@ class TestAmity(unittest.TestCase):
         remove_person = self.test_amity.delete_employee("Monica","Winnie")
         self.assertEqual(remove_person, "staff deleted")
 
-    def test_fellow_is_deleted_from_living_space(self):
+    # def test_fellow_is_deleted_from_living_space(self):
+    #     """test that person is no longer existing after the remove function is called"""
+    #     self.test_amity.create_room("living_space",["Menelik"])
+    #     self.test_amity.create_room("office", ["Meganagha"])
+
+        # self.test_amity.add_person("Bonny", "Khaemba", "fellow", "y")
+        # remove_person = self.test_amity.delete_employee("Bonny", "Khaemba",)
+        # self.assertEqual(remove_person, "fellow deleted")
+
+    def test_staff_is_deleted_from_unallocated_office_space(self):
         """test that person is no longer existing after the remove function is called"""
-        self.test_amity.create_room("living_space",["Menelik"])
-        self.test_amity.create_room("office", ["Meganagha"])
+        self.test_amity.add_person("Wendy", "Maina", "staff")
+        remove_person = self.test_amity.delete_employee("Wendy", "Maina")
+        self.assertEqual(remove_person, 'staff deleted')
 
-        self.test_amity.add_person("Bonny", "Khaemba", "fellow", "y")
-        remove_person = self.test_amity.delete_employee("Bonny", "Khaemba",)
-        self.assertEqual(remove_person, "fellow deleted")
-
-    def test_person_is_deleted_from_staff(self):
-        """test that person is no longer existing after the remove function is called"""
-        self.test_amity.create_room("office", ["Ravindel"])
-        self.test_amity.add_person("Mbaire", "Elizabeth", "staff")
-        remove_person = self.test_amity.delete_employee("Mbaire","Elizabeth")
-        self.assertEqual(remove_person, "staff deleted")
-
-    def test_fellow_is_deleted_from_unallocated_living_space(self):
+    def test_fellow_is_deleted_from_unallocated_living_space_and_unallocated_office(self):
         """test that person is no longer existing after the remove function is called"""
         self.test_amity.add_person("Mbaire", "Elizabeth", "fellow", "y")
-        self.test_amity.create_room("office",["Ravindel"])
         remove_person = self.test_amity.delete_employee("Mbaire","Elizabeth")
-        self.assertEqual(remove_person, "deleted from unallocated space")
+        self.assertEqual(remove_person, 'deleted from unallocated space')
 
-    def test_fellow_is_deleted_from_fellow_db(self):
+    def test_fellow_is_deleted_from_unallocated_office_and_living_space(self):
         """test that person is no longer existing after the remove function is called"""
-        self.test_amity.create_room("office",["Mexico"])
-        self.test_amity.create_room("living_space", ["Sheromeda"])
-        self.test_amity.add_person("Wambui", "Nganga", "fellow", "y")
-        remove_person = self.test_amity.delete_employee("Wambui","Nganga")
+        self.test_amity.create_room("living_space", ["BoleAtlas"])
+        self.test_amity.add_person("Sylvia", "Leah", "fellow", "y")
+        remove = self.test_amity.delete_employee("Sylvia", "Leah")
+        self.assertEqual(remove, "deleted from unallocated space")
+
+    def test_fellow_is_deleted_from_office_and_unallocated_living_space(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("office", ["AtikilTera"])
+        self.test_amity.add_person("Alex", "Ouma", "fellow", "y")
+        remove = self.test_amity.delete_employee("Alex", "Ouma")
+        self.assertEqual(remove, "fellow deleted")
+
+    def test_delete_employee_cannot_delete_person_not_in_system(self):
+        """test system cannot delete None"""
+        remove_person = self.test_amity.delete_employee("Wambui", "Murithi")
+        self.assertEqual(remove_person, 'operation not successful.person does not exist')
+
+    def test_fellow_is_deleted_from_office_and_living_space(self):
+        """test that person is no longer existing after the remove function is called"""
+        self.test_amity.create_room("office", ["MesekelSquare"])
+        self.test_amity.create_room("living_space", ["BoleBrass"])
+        self.test_amity.add_person("Kevin", "Maina", "fellow", "y")
+        remove_person = self.test_amity.delete_employee("Kevin","Maina")
         self.assertEqual(remove_person, "fellow deleted")
 
     def test_it_prints_unallocated(self):

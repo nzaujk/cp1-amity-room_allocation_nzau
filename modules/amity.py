@@ -195,7 +195,7 @@ class Amity (object):
         full_name = first_name + " " + last_name
         if full_name not in self.fellow and full_name not in self.staff:
             print("{0} does not exist in the system".format(full_name))
-            return "operation not successful.room does not exist"
+            return "operation not successful.person does not exist"
 
         for name in self.fellow:
             if full_name in self.fellow:
@@ -228,13 +228,81 @@ class Amity (object):
         for name in self.staff:
             if full_name in self.staff:
                 if full_name in self.unallocated_office:
-                    self.fellow.remove(name)
+                    self.staff.remove(name)
                     # delete name name if name exists else return none
                     self.unallocated_office.pop(name, None)
                 if full_name in self.office:
                     self.office[name].occupants.remove(full_name)
             print("{} has been deleted from the system".format(full_name))
+
             return "staff deleted"
+
+
+
+
+        # for name in (self.staff or self.fellow):
+        #     if self.fellow and (self.unallocated_office and full_name in self.living_space):
+        #         self.fellow.remove(name)
+        #         self.unallocated_office.pop(name, None)
+        #         self.living_space.pop(name, None)
+        #         print("{} deleted from unallocated office space".format(full_name))
+        #         print("{} deleted from living_space space".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "deleted from unallocated office space and living_space"
+        #
+        #     if self.fellow and (self.office and self.unallocated_living_space):
+        #         self.unallocated_living_space.pop(name)
+        #         self.office.pop(name,None)
+        #         self.fellow.remove(name,None)
+        #         print("{} deleted from office space".format(full_name))
+        #         print("{} deleted from unallocated living space".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #
+        #         return "deleted from office deleted from unallocated living_space space"
+        #
+        #     elif self.fellow and (self.unallocated_office and self.unallocated_living_space):
+        #         self.fellow.remove(name)
+        #         self.unallocated_living_space.pop(name, None)
+        #         self.unallocated_office.pop(name, None)
+        #         print("{} deleted from unallocated office space".format(full_name))
+        #         print("{} deleted from unallocated living space".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "deleted from  unallocated office deleted from unallocated living_space"
+        #
+        #     if full_name in self.fellow and full_name in (self.unallocated_office and self.living_space):
+        #         self.fellow.remove(name)
+        #         self.living_space.pop(name, None)
+        #         self.unallocated_office.pop(name, None)
+        #         print("{} deleted from unallocated office space".format(full_name))
+        #         print("{} deleted from living space".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "deleted from  unallocated office deleted from living_space"
+        #
+        #     if full_name in self.fellow and full_name in (self.office and self.living_space):
+        #         self.fellow.remove(name)
+        #         self.unallocated_living_space.pop(name, None)
+        #         self.unallocated_office.pop(name, None)
+        #         print("{} deleted from office ".format(full_name))
+        #         print("{} deleted from living space".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "deleted from  office deleted from living_space"
+        #
+        #     if full_name in self.staff and full_name in self.unallocated_office:
+        #         self.staff.remove(name)
+        #         # delete name name if name exists else return none
+        #         self.unallocated_office.pop(name, None)
+        #         print("{} deleted from unallocated office space ".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "deleted staff"
+        #     if full_name in self.staff and full_name in self.office:
+        #         # self.office[full_name].remove(name)
+        #         self.staff.remove(name)
+        #         print("{} deleted from office  ".format(full_name))
+        #         print("{} has been removed from the system".format(full_name))
+        #         return "staff deleted"
+        #     if not (self.staff or self.fellow):
+        #         print("{} does not exist in the system".format(full_name))
+        #         return "does not exist"
 
     def generating_random_office(self):
         """generates random offices to be allocated by the add person function"""
@@ -258,20 +326,22 @@ class Amity (object):
             print('No living spaces available.Please try later')
 
     def print_employees(self, role):
-        for person in self.employees:
+        full_list = self.fellow or self.staff
+
+        for person in full_list:
             if person in self.staff:
                 self.employees[role] = person
-                print("*" * 30 + "\n" + "Staff Names" + "\n")
+                print("*" * 30)
                 print(person + "\t" + role)
-                return "staff"
-            if person in self.fellow:
+
+            elif person in self.fellow:
                 self.employees[role] = person
-                print("*" * 30 + "\n" + "Fellow Names" + "\n")
+                print("*" * 30 + "\n")
                 print(person + "\t" + role)
-                return "fellow"
-            if person not in self.fellow or person not in self.staff:
+
+            else:
                 print("The list is empty")
-                return "empty list"
+                return "empty"
 
     def print_rooms(self, room_name):
         """print all the members from a given room"""
@@ -343,49 +413,36 @@ class Amity (object):
 
     def print_unallocated(self, filename=None):
         """Print unallocated in office"""
-        space = ""
-        for space in self.unallocated_office:
+        for person,role in self.unallocated_office.items():
+            print("+" * 30 + "\n" + "Unallocated members: Office Space")
+            print(person + ": \n" + role + " \n")
+            print("+" * 30)
 
-            if space:
-                for person in self.unallocated_office.keys():
-                    print("+" * 30 + "\n" + "Unallocated members: Office Space")
-                    print(space + ": \n" + person + " \n")
-                    print("+" * 30)
-                print("\n")
-
-        for space in self.unallocated_living_space:
-
-            if space:
-                for person in self.unallocated_living_space[space].keys():
-                    print("+" * 30 + "\n" + "Unallocated members: Living Space")
-                    print(space + "\n" + person + " \n")
-                    print("+" * 30)
-                print("\n")
-        if not space:
-            print("\n The list is empty")
+        for person, role in self.unallocated_living_space.items():
+            print("+" * 30 + "\n" + "Unallocated members: Living Space")
+            print(person + "\n" + role + " \n")
+            print("+" * 30)
+        print("\n")
         if filename:
-            print("*" * 30 + "\n" + "Unallocated members: Office Space\n" + "*" * 30)
+            print("*" * 30 + "\n" + "Unallocated members: Office Space" + "\n" + "*" * 30)
             file = open(filename + ".txt", "w")
-            file.write("*" * 30 + "\n" + "Office\n" + "*" * 30)
-            print("*" * 30 + "\n" + "Living Space Allocations" + "\n" + "*" * 30)
-            print("*" * 30 + "\n" + "Unallocated members: Living Space" + "\n" + "*" * 30)
-            for space in self.unallocated_office:
-                # occupants
+            print("*" * 30)
+            print("\n")
+            print("*" * 30)
+            print("Unallocated members: Living Space")
+            print("*" * 30)
+        # writing to text file
+        for person,role in self.unallocated_office.items():
+            file.write("  Office:Unallocated\n")
+            file.write(person + "\n")
+            file.write(role.lower())
 
-                if space:  # not equal
-                    file.write(space + "\n" + "*" * 30)
-                    for person in self.unallocated_office.keys():
-                        file.write(person)
-            file.write("*" * 30 + "\n" + "Living Space" + "\n" + "*" * 30)
+        for person, role in self.unallocated_living_space.items():
+            file.write("  Living Space:Unallocated\n")
+            file.write(person + "\n")
+            file.write(role.lower())
 
-            for space in self.unallocated_living_space.keys():
-
-                if space:  # not equal
-                    file.write(space + "\n" + "*" * 30)
-                    for person in self.unallocated_living_space.keys():
-                        file.write(person)
-
-            print("{0}.txt printed".format(filename))
+        print("{0}.txt printed".format(filename))
 
     def load_people(self, filename):
         if filename:
@@ -545,10 +602,10 @@ class Amity (object):
         unallocated_people = select([UnallocatedDB])
         result = db_load.session.execute(unallocated_people)
         unallocated_people_list = [person.name for person in result]
-        for person in self.unallocated_living_space:
+        for person in self.unallocated_living_space.items():
             if person not in unallocated_people_list:
-                room_name = UnallocatedDB(name=person)
-                db_load.session.add(room_name)
+                new_name = UnallocatedDB(name=person, role=role)
+                db_load.session.add(new_name)
                 db_load.session.commit()
                 print("saved")
             return "saved status"
