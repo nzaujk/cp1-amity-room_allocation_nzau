@@ -1,0 +1,12 @@
+office OldTown
+office OldValyria
+office Braavos
+office Westeros
+office RiverLands
+office Dorne
+living_space King'sLanding
+living_space BeyondTheWall
+living_space TheNorth
+living_space Volantis
+living_space CasterlyRock
+living_space WinterFell

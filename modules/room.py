@@ -1,8 +1,8 @@
-"""this class contains the office and living space methods """
+"""this class contains the office and living_space methods """
 
 
 class Room(object):
-    def __init__(self, room_name=None, room_type=None, capacity=None):
+    def __init__(self, room_name=None, room_type=None, capacity=0):
         self.room_name = room_name
         self.capacity = capacity
         self.room_type = room_type
@@ -19,5 +19,5 @@ class LivingSpace(Room):
     """LivingSpace inherits from base class. super method runs before the subclass instance"""
 
     def __init__(self, room_name):
-        super().__init__(room_name, room_type="living space", capacity=4)
+        super().__init__(room_name, room_type="living_space", capacity=4)
 
