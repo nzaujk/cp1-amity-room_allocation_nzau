@@ -58,7 +58,7 @@ class AmityDatabaseLoad(object):
         if self.db_name:
             self.db_name = db_name + ".sqlite"
         else:
-            self.db_name = 'amity_db.sqlite'
+            self.db_name = 'amity_db.sqlite' # pragma: no cover
         # create an SQLEngine object to handle the connection
         self.my_engine = create_engine('sqlite:///' + self.db_name)
         # self.session = sessionmaker()

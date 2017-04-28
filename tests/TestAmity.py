@@ -317,5 +317,5 @@ class TestAmity(unittest.TestCase):
         self.assertEqual(self.test_amity.load_state("amity_db"), "operation successful")
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() # pragma: no cover
 
