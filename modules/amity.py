@@ -370,7 +370,7 @@ class Amity (object):
         room = ""
         for room in self.office:
 
-            if room:
+            if room: # pragma: no cover
                 for person in self.office[room].occupants:
                     print("+" * 30)
                     print(room + ": \t" + person + " \n")
@@ -380,7 +380,7 @@ class Amity (object):
         for room in self.living_space:
 
             # print(room + "\n" + "*" * 30)
-            if room:
+            if room:# pragma: no cover
                 for person in self.living_space[room].occupants:
                     print("+" * 30)
                     print(room + ": \t" + person + " \n")
