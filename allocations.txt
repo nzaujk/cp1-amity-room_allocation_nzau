@@ -1,0 +1,102 @@
+##############################
+Office
+##############################OldTown: 	
+******************************
+OldTown: 	Dominic Walters
+
+OldTown: 	Wanjiku Theuri
+
+OldTown: 	Mumbi Nduju
+
+OldTown: 	Omondi Mwangi
+
+OldTown: 	Sherel Ndunge
+OldValyria: 	
+******************************
+OldValyria: 	Simon Patterson
+
+OldValyria: 	Mari Lawrence
+
+OldValyria: 	Murithi Wanjau
+
+OldValyria: 	Ken Michael
+
+OldValyria: 	Phillip Evelyne
+
+OldValyria: 	Brian Ahmed
+Braavos: 	
+******************************
+Braavos: 	David Mungai
+
+Braavos: 	Evans Wamboye
+
+Braavos: 	Shiznit Njenga
+Westeros: 	
+******************************
+Westeros: 	Leigh Riley
+
+Westeros: 	Kelly Mcguire
+
+Westeros: 	Nduku Mwangi
+
+Westeros: 	Sheila Njagah
+
+Westeros: 	Feven Gabremariam
+RiverLands: 	
+******************************
+RiverLands: 	Moses Kioko
+
+RiverLands: 	Susan Tavita
+
+RiverLands: 	Kevin Taenda
+
+RiverLands: 	Bezawit Shewarega
+
+RiverLands: 	Kalekye Mumo
+Dorne: 	
+******************************
+Dorne: 	Oluwafemi Sule
+
+Dorne: 	Tana Lopez
+
+Dorne: 	Jonathan Kamau
+
+Dorne: 	Stella Ndunge
+******************************
+Living Space
+******************************King'sLanding
+******************************
+King'sLanding: 	Simon Patterson
+
+King'sLanding: 	Sheila Njagah
+BeyondTheWall
+******************************TheNorth
+******************************
+TheNorth: 	Mari Lawrence
+
+TheNorth: 	Jonathan Kamau
+
+TheNorth: 	Bezawit Shewarega
+
+TheNorth: 	Brian Ahmed
+Volantis
+******************************
+Volantis: 	Phillip Evelyne
+
+Volantis: 	Omondi Mwangi
+
+Volantis: 	Kalekye Mumo
+CasterlyRock
+******************************
+CasterlyRock: 	Tana Lopez
+
+CasterlyRock: 	David Mungai
+WinterFell
+******************************
+WinterFell: 	Oluwafemi Sule
+
+WinterFell: 	Wanjiku Theuri
+
+WinterFell: 	Murithi Wanjau
+
+WinterFell: 	Feven Gabremariam

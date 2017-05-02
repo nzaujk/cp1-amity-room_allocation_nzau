@@ -148,14 +148,14 @@ class AmityApplication(cmd.Cmd):
 
         if room_name in amity_object.office:
             amity_object.reallocate_person_to_office(first_name,last_name, room_name)
-        elif room_name in amity_object.living_space:
-            amity_object.reallocate_person_to_office(first_name,last_name, room_name)
+        # elif room_name in amity_object.living_space:
+        #     amity_object.reallocate_person_to_office(first_name,last_name, room_name)
         else:
-            print('{0}is not a room in Amity' .format(room_name))
+            print('{0}is not an office space' .format(room_name))
 
     @docopt_cmd
     def do_delete_employee(self, arg):
-        """Usage: reallocate_person_to_office <first_name> <last_name>"""
+        """Usage: delete_employee <first_name> <last_name>"""
         first_name = arg["<first_name>"]
         last_name = arg["<last_name>"]
         full_name = first_name + " " + last_name
@@ -172,15 +172,14 @@ class AmityApplication(cmd.Cmd):
         """Usage: reallocate_person_to_living_space <first_name> <last_name> <room_name>"""
         first_name = arg["<first_name>"]
         last_name = arg["<last_name>"]
-        full_name = first_name + " " + last_name
-        room_name = arg["new_room_name>"]
+        room_name = arg["<room_name>"]
 
         if room_name in amity_object.living_space:
-            amity_object.reallocate_person_to_living_space(full_name.title(), room_name)
-        elif room_name in amity_object.living_space:
-            amity_object.reallocate_person_to_living_space(full_name.title(), room_name)
+            amity_object.reallocate_person_to_living_space(first_name, last_name, room_name)
+        # elif room_name in amity_object.living_space:
+        #     amity_object.reallocate_person_to_living_space(first_name, last_name, room_name)
         else:
-            print('{0}is not a room in Amity'.format(room_name))
+            print('{0}is not a living space'.format(room_name))
 
     @docopt_cmd
     def do_print_room(self, arg):

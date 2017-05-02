@@ -170,7 +170,7 @@ class Amity (object):
         return "operation successful"
 
     def reallocate_person_to_living_space(self, first_name, last_name, room_name):
-        full_name = first_name + " "+ last_name
+        full_name = first_name + " " + last_name
         if full_name not in self.fellow and full_name not in self.staff:
             print("{0} does not exist in the system".format(full_name))
             return "operation not successful.room does not exist"
@@ -344,7 +344,7 @@ class Amity (object):
 
     def print_unallocated(self, filename=None):
         """Print unallocated in office"""
-        for person,role in self.unallocated_office.items():
+        for person, role in self.unallocated_office.items():
             print("+" * 30 + "\n" + "Unallocated members: Office Space")
             print(person + ": \n" + role + " \n")
             print("+" * 30)
@@ -362,16 +362,16 @@ class Amity (object):
             print("*" * 30)
             print("Unallocated members: Living Space")
             print("*" * 30)
-        # writing to text file
-        for person,role in self.unallocated_office.items():
-            file.write("  Office:Unallocated\n")
-            file.write(person + "\n")
-            file.write(role.lower())
+            # writing to text file
+            for person,role in self.unallocated_office.items():
+                file.write("  Office:Unallocated\n")
+                file.write(person + "\n")
+                file.write(role.lower())
 
-        for person, role in self.unallocated_living_space.items():
-            file.write("  Living Space:Unallocated\n")
-            file.write(person + "\n")
-            file.write(role.lower())
+            for person, role in self.unallocated_living_space.items():
+                file.write("  Living Space:Unallocated\n")
+                file.write(person + "\n")
+                file.write(role.lower())
 
         print("{0}.txt printed".format(filename))
 
@@ -539,4 +539,6 @@ class Amity (object):
                 db_load.session.commit()
                 print("saved")
             return "saved status"
+
+
 
