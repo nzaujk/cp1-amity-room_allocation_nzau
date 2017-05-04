@@ -45,3 +45,7 @@ $ python app.py
 nosetests
 ```
 
+# Video
+```
+bit.ly/amity-room-allocation
+```
